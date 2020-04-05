@@ -70,7 +70,7 @@ The file follows the following format:
         
 See the file script for an example of the file format
 """
-ARG_COMMANDS = [ 'box', 'sphere', 'torus', 'circle', 'bezier', 'hermite', 'line', 'scale', 'move', 'rotate', 'save' ]
+ARG_COMMANDS = [ 'box', 'sphere', 'torus', 'circle', 'bezier', 'hermite', 'line', 'scale', 'move', 'rotate', 'save', 'color']
 
 def parse_file( fname, edges, polygons, csystems, screen, color ):
 
@@ -93,12 +93,10 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             new = csystems[-1].copy()
             csystems.append(new)
         
-        if line == 'pop':
+        elif line == 'pop':
             csystems.pop()
-            
         
-        
-        if line == 'sphere':
+        elif line == 'sphere':
             #print 'SPHERE\t' + str(args)
             add_sphere(polygons,
                        float(args[0]), float(args[1]), float(args[2]),
@@ -106,7 +104,10 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             matrix_mult(csystems[-1], polygons)
             draw_polygons(polygons, screen, color)
             polygons = []
-
+            
+        elif line == 'color':
+            color = [int(args[0]), int(args[1]), int(args[2])]
+        
         elif line == 'torus':
             #print 'TORUS\t' + str(args)
             add_torus(polygons,
