@@ -103,7 +103,7 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             add_sphere(polygons,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step_3d)
-            matrix_mult(polygons, csystems[-1])
+            matrix_mult(csystems[-1], polygons)
             draw_polygons(polygons, screen, color)
             polygons = []
 
@@ -112,7 +112,7 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             add_torus(polygons,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), step_3d)
-            matrix_mult(polygons, csystems[-1])
+            matrix_mult(csystems[-1], polygons)
             draw_polygons(polygons, screen, color)
             polygons = []
 
@@ -121,7 +121,7 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             add_box(polygons,
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]))
-            matrix_mult(polygons, csystems[-1])
+            matrix_mult(csystems[-1], polygons)
             draw_polygons(polygons, screen, color)
             polygons = []
 
@@ -130,8 +130,9 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             add_circle(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
-            matrix_mult(edges, csystems[-1])
+            matrix_mult(csystems[-1], edges)
             draw_lines(edges, screen, color)
+            edges = []
 
         elif line == 'hermite' or line == 'bezier':
             #print 'curve\t' + line + ": " + str(args)
@@ -141,8 +142,9 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
                       float(args[4]), float(args[5]),
                       float(args[6]), float(args[7]),
                       step, line)
-            matrix_mult(edges, csystems[-1])
+            matrix_mult(csystems[-1], edges)
             draw_lines(edges, screen, color)
+            edges = []
 
         elif line == 'line':
             #print 'LINE\t' + str(args)
@@ -150,18 +152,19 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
             add_edge( edges,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), float(args[5]) )
-            matrix_mult(edges, csystems[-1])
+            matrix_mult(csystems[-1], edges)
             draw_lines(edges, screen, color)
+            edges = []
 
         elif line == 'scale':
             #print 'SCALE\t' + str(args)
             t = make_scale(float(args[0]), float(args[1]), float(args[2]))
-            matrix_mult(csystems[-1], t)
+            matrix_mult(t, csystems[-1])
 
         elif line == 'move':
             #print 'MOVE\t' + str(args)
             t = make_translate(float(args[0]), float(args[1]), float(args[2]))
-            matrix_mult(csystems[-1], t)
+            matrix_mult(t, csystems[-1])
 
         elif line == 'rotate':
             #print 'ROTATE\t' + str(args)
@@ -173,7 +176,7 @@ def parse_file( fname, edges, polygons, csystems, screen, color ):
                 t = make_rotY(theta)
             else:
                 t = make_rotZ(theta)
-            matrix_mult(csystems[-1], t)
+            matrix_mult(t, csystems[-1])
 
 #        elif line == 'ident':
 #            ident(transform)
